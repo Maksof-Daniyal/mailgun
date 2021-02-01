@@ -1,8 +1,12 @@
 const MailGun = require('mailgun-js');
 
-exports.getRandomColor = async (apiKey,domain,data) => {
-    const mg = MailGun({apiKey: apiKey, domain: domain});
-    await mg.messages().send(data, function (error, body) {
-        return body;
-    });
+exports.getRandomColor = (apiKey,domain,data,callback) => {
+    try{
+        const mg = MailGun({apiKey: apiKey, domain: domain});
+        mg.messages().send(data, async function (error, body) {
+            await callback(body);
+        });
+    } catch(ex){
+        console.error(ex);
+    }
 }
